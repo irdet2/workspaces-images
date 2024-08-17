@@ -51,6 +51,19 @@ RUN \
   chown -R 1000:0 /home/kasm-user && \
   rm -Rf ${INST_DIR}
 
+# Copy Grass scripts
+COPY ./src_extra/ $INST_DIR
+
+# Run Grass installation
+RUN \
+    bash ${INST_DIR}/ubuntu/install/grass/install_grass.sh    || exit 1; \
+  $STARTUPDIR/set_user_permission.sh $HOME && \
+  rm -f /etc/X11/xinit/Xclients && \
+  chown 1000:0 $HOME && \
+  mkdir -p /home/kasm-user && \
+  chown -R 1000:0 /home/kasm-user && \
+  rm -Rf ${INST_DIR}
+
 # Userspace Runtime
 ENV HOME /home/kasm-user
 WORKDIR $HOME
